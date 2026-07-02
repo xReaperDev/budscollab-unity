@@ -1,0 +1,17 @@
+{
+  "name": "com.budscollab.unity",
+  "version": "0.1.0",
+  "displayName": "BudsCollab for Unity",
+  "description": "Unity editor tools for BudsCollab assets, validation, preview, and room publishing.",
+  "unity": "2022.3",
+  "author": {
+    "name": "BudsCollab"
+  },
+  "samples": [
+    {
+      "displayName": "BudsCollab for Unity Demo",
+      "description": "Minimal scene setup for testing the BudsCollab editor window.",
+      "path": "Samples~/BridgeDemo"
+    }
+  ]
+}
