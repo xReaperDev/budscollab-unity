@@ -12,16 +12,10 @@ Use Unity Package Manager:
 3. Choose `Add package from git URL...`.
 4. Paste the package URL.
 
-When this package is exported to its public repo, use:
+Use this Git URL:
 
 ```txt
 https://github.com/xReaperDev/budscollab-unity.git
-```
-
-For private monorepo testing, use:
-
-```txt
-https://github.com/xReaperDev/budscollab.git?path=/integrations/unity#reaperdev/bc-275-research-and-unify-budssdk-budsapp-budscollab-primitives
 ```
 
 ## Use
