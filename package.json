@@ -1,8 +1,8 @@
 {
   "name": "com.budscollab.unity",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "displayName": "BudsCollab for Unity",
-  "description": "Unity editor tools for BudsCollab assets, validation, preview, and room publishing.",
+  "description": "Unity editor tools for loading BudsCollab spaces and checking selected scene assets.",
   "unity": "2022.3",
   "author": {
     "name": "BudsCollab"

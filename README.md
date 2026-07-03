@@ -1,7 +1,6 @@
 # BudsCollab for Unity
 
-Unity Package Manager package for testing BudsCollab asset workflows inside the
-Unity editor.
+Unity Package Manager package for connecting the Unity editor to BudsCollab spaces and checking selected scene assets.
 
 ## Install from Git
 
@@ -22,7 +21,11 @@ https://github.com/xReaperDev/budscollab-unity.git
 
 Open `Window > BudsCollab`.
 
-The first test shell includes login, space/room/wall selection, asset browser
-placeholder, validation, upload selected, open web preview, and publish controls.
-The public product name is BudsCollab for Unity; internally it still uses the
-BudsCollab bridge protocol and `@budscollab/buds-bridge-sdk` contracts.
+1. Click `Open BudsCollab Login` if you need to sign in.
+2. Create a read-only MCP token from the BudsCollab MCP connect guide, then paste it into `Access Token`.
+3. Click `Connect and Load Spaces`.
+4. Pick a fetched space and room from the dropdowns.
+5. Use `Open Selected Room` to open that room in BudsCollab.
+6. Select scene objects and run `Check Selected Objects`.
+
+This package is intentionally Unity-only. Cross-app handoff, import, upload, and publish controls are not shown until those flows have real endpoints.

@@ -1,0 +1,14 @@
+{
+  "name": "BudsCollab.Unity.Editor",
+  "rootNamespace": "BudsCollab.Unity.Editor",
+  "references": ["BudsCollab.Unity"],
+  "includePlatforms": ["Editor"],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}
