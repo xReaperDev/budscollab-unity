@@ -26,8 +26,9 @@ Open `Window > BudsCollab`.
 3. Click `Connect and Load Spaces`.
 4. Pick a fetched space and room from the dropdowns.
 5. Use `Open Selected Room` to open that room in BudsCollab.
-6. Select scene objects and run `Check Selected Objects`.
+6. Pick a target profile: `Room object`, `Mobile / lightweight`, `High detail`, or `Print cleanup`.
+7. Select scene objects and run `Check Selected Objects`.
 
-The scene check follows the same creator-tool pattern used by mature avatar/content pipelines: catch obvious performance and readiness issues before upload. It reports meshes, renderers, vertices, triangles, material slots, bounds, lights, particle systems, and missing materials.
+The scene check follows the same creator-tool pattern used by mature DCC pipelines: catch obvious performance and readiness issues before upload. It reports meshes, renderers, vertices, triangles, material slots, bounds, lights, particle systems, and missing materials against the selected target profile.
 
 This package is intentionally Unity-only. Cross-app handoff, import, upload, and publish controls are not shown until those flows have real endpoints.

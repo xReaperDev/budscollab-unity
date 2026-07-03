@@ -4,6 +4,41 @@ using UnityEngine;
 
 namespace BudsCollab.Unity
 {
+    public enum BudsCollabTargetProfile
+    {
+        RoomObject,
+        MobileLight,
+        HighDetail,
+        PrintCleanup
+    }
+
+    public readonly struct BudsCollabTargetBudget
+    {
+        public BudsCollabTargetBudget(
+            string label,
+            int goodTriangles,
+            int maxTriangles,
+            int goodMaterialSlots,
+            int maxMaterialSlots,
+            float maxBoundsMeters
+        )
+        {
+            Label = label;
+            GoodTriangles = goodTriangles;
+            MaxTriangles = maxTriangles;
+            GoodMaterialSlots = goodMaterialSlots;
+            MaxMaterialSlots = maxMaterialSlots;
+            MaxBoundsMeters = maxBoundsMeters;
+        }
+
+        public string Label { get; }
+        public int GoodTriangles { get; }
+        public int MaxTriangles { get; }
+        public int GoodMaterialSlots { get; }
+        public int MaxMaterialSlots { get; }
+        public float MaxBoundsMeters { get; }
+    }
+
     public readonly struct BudsCollabSelectionReport
     {
         public BudsCollabSelectionReport(bool ok, string summary)
@@ -18,14 +53,28 @@ namespace BudsCollab.Unity
 
     public static class BudsCollabSelectionValidator
     {
-        private const int GoodTriangleCount = 70000;
-        private const int HeavyTriangleCount = 250000;
-        private const int GoodMaterialSlots = 8;
-        private const int HeavyMaterialSlots = 32;
-        private const float LargeBoundsMeters = 6f;
-
-        public static BudsCollabSelectionReport Validate(IReadOnlyList<GameObject> selectedObjects)
+        public static BudsCollabTargetBudget BudgetFor(BudsCollabTargetProfile profile)
         {
+            switch (profile)
+            {
+                case BudsCollabTargetProfile.MobileLight:
+                    return new BudsCollabTargetBudget("Mobile / lightweight", 20000, 70000, 4, 12, 4f);
+                case BudsCollabTargetProfile.HighDetail:
+                    return new BudsCollabTargetBudget("High detail", 250000, 1000000, 16, 64, 12f);
+                case BudsCollabTargetProfile.PrintCleanup:
+                    return new BudsCollabTargetBudget("Print cleanup", 150000, 500000, 4, 16, 0.5f);
+                case BudsCollabTargetProfile.RoomObject:
+                default:
+                    return new BudsCollabTargetBudget("Room object", 70000, 250000, 8, 32, 6f);
+            }
+        }
+
+        public static BudsCollabSelectionReport Validate(
+            IReadOnlyList<GameObject> selectedObjects,
+            BudsCollabTargetProfile profile
+        )
+        {
+            var budget = BudgetFor(profile);
             if (selectedObjects == null || selectedObjects.Count == 0)
             {
                 return new BudsCollabSelectionReport(
@@ -105,11 +154,11 @@ namespace BudsCollab.Unity
                 warnings.Add("no renderable mesh geometry");
             }
 
-            if (triangleCount > HeavyTriangleCount)
+            if (triangleCount > budget.MaxTriangles)
             {
                 warnings.Add("very high triangle count");
             }
-            else if (triangleCount > GoodTriangleCount)
+            else if (triangleCount > budget.GoodTriangles)
             {
                 notes.Add("triangle count above lightweight target");
             }
@@ -124,11 +173,11 @@ namespace BudsCollab.Unity
                 warnings.Add($"{missingMaterials} missing material slot(s)");
             }
 
-            if (materialSlots > HeavyMaterialSlots)
+            if (materialSlots > budget.MaxMaterialSlots)
             {
                 warnings.Add("too many material slots");
             }
-            else if (materialSlots > GoodMaterialSlots)
+            else if (materialSlots > budget.GoodMaterialSlots)
             {
                 notes.Add("material slots above lightweight target");
             }
@@ -136,7 +185,7 @@ namespace BudsCollab.Unity
             if (combinedBounds.HasValue)
             {
                 var size = combinedBounds.Value.size;
-                if (Mathf.Max(size.x, size.y, size.z) > LargeBoundsMeters)
+                if (Mathf.Max(size.x, size.y, size.z) > budget.MaxBoundsMeters)
                 {
                     warnings.Add("large object bounds");
                 }
@@ -161,7 +210,7 @@ namespace BudsCollab.Unity
                 ? $"{Mathf.Max(combinedBounds.Value.size.x, combinedBounds.Value.size.y, combinedBounds.Value.size.z):0.0}m max bounds"
                 : "no bounds";
             var summary =
-                $"{readiness}: {meshCount} mesh(es), {rendererCount} renderer(s), {vertexCount:n0} vertices, {triangleCount:n0} triangles, {materialSlots} material slot(s), {boundsLabel}";
+                $"{readiness} for {budget.Label}: {meshCount} mesh(es), {rendererCount} renderer(s), {vertexCount:n0} vertices, {triangleCount:n0} triangles, {materialSlots} material slot(s), {boundsLabel}";
 
             if (warnings.Count > 0)
             {

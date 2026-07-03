@@ -11,6 +11,21 @@ namespace BudsCollab.Unity.Editor
     {
         private const string WorkspaceEndpoint = "/api/creator-tools/workspace";
         private const string DefaultApiBaseUrl = "https://app.budscollab.com";
+        private static readonly BudsCollabTargetProfile[] TargetProfileValues =
+        {
+            BudsCollabTargetProfile.RoomObject,
+            BudsCollabTargetProfile.MobileLight,
+            BudsCollabTargetProfile.HighDetail,
+            BudsCollabTargetProfile.PrintCleanup
+        };
+
+        private static readonly string[] TargetProfileLabels =
+        {
+            "Room object",
+            "Mobile / lightweight",
+            "High detail",
+            "Print cleanup"
+        };
 
         private enum ConnectionState
         {
@@ -56,6 +71,7 @@ namespace BudsCollab.Unity.Editor
         private string accessToken = string.Empty;
         private string status = "Not connected";
         private string assetCheckSummary = "No asset checked";
+        private BudsCollabTargetProfile targetProfile = BudsCollabTargetProfile.RoomObject;
         private int selectedSpaceIndex;
         private int selectedRoomIndex;
         private Vector2 scroll;
@@ -156,6 +172,13 @@ namespace BudsCollab.Unity.Editor
         {
             EditorGUILayout.Space(12);
             EditorGUILayout.LabelField("Scene Tools", EditorStyles.boldLabel);
+            targetProfile = TargetProfileValues[
+                EditorGUILayout.Popup(
+                    "Target",
+                    Math.Max(Array.IndexOf(TargetProfileValues, targetProfile), 0),
+                    TargetProfileLabels
+                )
+            ];
             EditorGUILayout.LabelField("Asset Check", assetCheckSummary, EditorStyles.wordWrappedLabel);
 
             if (GUILayout.Button("Check Selected Objects"))
@@ -178,7 +201,7 @@ namespace BudsCollab.Unity.Editor
             activeRequest = UnityWebRequest.Get($"{NormalizeApiBaseUrl(apiBaseUrl)}{WorkspaceEndpoint}");
             activeRequest.SetRequestHeader("Authorization", $"Bearer {accessToken.Trim()}");
             activeRequest.SetRequestHeader("Accept", "application/json");
-            activeRequest.SetRequestHeader("User-Agent", "BudsCollab-Unity/0.1.2");
+            activeRequest.SetRequestHeader("User-Agent", "BudsCollab-Unity/0.1.3");
 
             state = ConnectionState.Loading;
             status = "Loading BudsCollab spaces...";
@@ -245,7 +268,7 @@ namespace BudsCollab.Unity.Editor
 
         private void CheckSelectedObjects()
         {
-            var report = BudsCollabSelectionValidator.Validate(Selection.gameObjects);
+            var report = BudsCollabSelectionValidator.Validate(Selection.gameObjects, targetProfile);
             assetCheckSummary = report.Summary;
             state = report.Ok ? ConnectionState.AssetCheckPassed : ConnectionState.AssetNeedsAttention;
             status = report.Ok ? "Asset check passed" : "Asset check needs attention";
