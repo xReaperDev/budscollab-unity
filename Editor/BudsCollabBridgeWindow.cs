@@ -77,8 +77,6 @@ namespace BudsCollab.Unity.Editor
         private void OnGUI()
         {
             scroll = EditorGUILayout.BeginScrollView(scroll);
-            EditorGUILayout.LabelField("BudsCollab for Unity", EditorStyles.boldLabel);
-            EditorGUILayout.Space(8);
 
             DrawConnection();
             DrawDestination();
@@ -93,7 +91,7 @@ namespace BudsCollab.Unity.Editor
             EditorGUILayout.EnumPopup("State", state);
             EditorGUILayout.LabelField("Status", status, EditorStyles.wordWrappedLabel);
             apiBaseUrl = EditorGUILayout.TextField("BudsCollab URL", apiBaseUrl);
-            accessToken = EditorGUILayout.PasswordField("Access Token", accessToken);
+            accessToken = EditorGUILayout.PasswordField("Creator Tools Token", accessToken);
 
             using (new EditorGUILayout.HorizontalScope())
             {
@@ -136,7 +134,7 @@ namespace BudsCollab.Unity.Editor
             if (roomsForSelectedSpace.Count == 0)
             {
                 EditorGUILayout.HelpBox(
-                    "This space has no rooms visible to the current token.",
+                    "This space has no rooms visible to the current Creator Tools token.",
                     MessageType.Warning
                 );
                 return;
@@ -171,7 +169,7 @@ namespace BudsCollab.Unity.Editor
             if (string.IsNullOrWhiteSpace(accessToken))
             {
                 state = ConnectionState.ConnectionFailed;
-                status = "Access token required";
+                status = "Creator Tools token required";
                 Repaint();
                 return;
             }
@@ -180,7 +178,7 @@ namespace BudsCollab.Unity.Editor
             activeRequest = UnityWebRequest.Get($"{NormalizeApiBaseUrl(apiBaseUrl)}{WorkspaceEndpoint}");
             activeRequest.SetRequestHeader("Authorization", $"Bearer {accessToken.Trim()}");
             activeRequest.SetRequestHeader("Accept", "application/json");
-            activeRequest.SetRequestHeader("User-Agent", "BudsCollab-Unity/0.1.1");
+            activeRequest.SetRequestHeader("User-Agent", "BudsCollab-Unity/0.1.2");
 
             state = ConnectionState.Loading;
             status = "Loading BudsCollab spaces...";
@@ -215,7 +213,7 @@ namespace BudsCollab.Unity.Editor
             if (response == null || !response.ok)
             {
                 state = ConnectionState.ConnectionFailed;
-                status = $"BudsCollab rejected the token: {response?.error ?? "invalid_response"}";
+                status = $"BudsCollab rejected the Creator Tools token: {response?.error ?? "invalid_response"}";
                 return;
             }
 

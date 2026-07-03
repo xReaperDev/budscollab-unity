@@ -22,10 +22,12 @@ https://github.com/xReaperDev/budscollab-unity.git
 Open `Window > BudsCollab`.
 
 1. Click `Open BudsCollab Login` if you need to sign in.
-2. Create a read-only MCP token from the BudsCollab MCP connect guide, then paste it into `Access Token`.
+2. Create a BudsCollab Creator Tools token from BudsCollab settings, then paste it into `Creator Tools Token`.
 3. Click `Connect and Load Spaces`.
 4. Pick a fetched space and room from the dropdowns.
 5. Use `Open Selected Room` to open that room in BudsCollab.
 6. Select scene objects and run `Check Selected Objects`.
+
+The scene check follows the same creator-tool pattern used by mature avatar/content pipelines: catch obvious performance and readiness issues before upload. It reports meshes, renderers, vertices, triangles, material slots, bounds, lights, particle systems, and missing materials.
 
 This package is intentionally Unity-only. Cross-app handoff, import, upload, and publish controls are not shown until those flows have real endpoints.
